@@ -314,24 +314,176 @@
     // 在这里配置你们公司附近的初始餐厅名单！
     // ==========================================
     const INITIAL_RESTAURANTS = [
-        { name: "东北大骨头手工饺子", cuisine: "中式面点", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "Wagas 沃歌斯", cuisine: "西式简餐", price: "$$", time: "堂食", vibe: "健康" },
-        { name: "麦当劳 (金拱门)", cuisine: "西式快餐", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "轻食沙拉", cuisine: "轻食/沙拉", price: "$$", time: "快速", vibe: "健康" },
-	{ name: "食堂", cuisine: "员工食堂", price: "$", time: "快速", vibe: "健康" },
-        { name: "重庆小面", cuisine: "川渝面馆", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "淮南牛肉汤", cuisine: "汤饭小吃", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "麻辣烫", cuisine: "中式快餐", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "西北面馆", cuisine: "西北面食", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "浅草", cuisine: "日式料理", price: "$$", time: "堂食", vibe: "健康" },
-        { name: "猪脚饭", cuisine: "粤式快餐", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "乡村大院", cuisine: "地方土菜", price: "$$$", time: "堂食", vibe: "碳水快乐" },
-        { name: "麦当劳", cuisine: "西式快餐", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "肯德基", cuisine: "西式快餐", price: "$", time: "快速", vibe: "碳水快乐" },
-        { name: "恩施菜", cuisine: "鄂西土家菜", price: "$$$", time: "堂食", vibe: "碳水快乐" },
-        { name: "剁椒鱼头", cuisine: "经典湘菜", price: "$$$", time: "堂食", vibe: "碳水快乐" },
-		{ name: "双拼饭", cuisine: "广式烧腊", price: "$", time: "堂食", vibe: "碳水快乐" },
-		{ name: "螺蛳粉", cuisine: "广西小吃", price: "$", time: "堂食", vibe: "碳水快乐" },
+       const INITIAL_RESTAURANTS = [
+    {
+        "name": "东北大骨头手工饺子",
+        "cuisine": "中式面点",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "Wagas 沃歌斯",
+        "cuisine": "西式简餐",
+        "price": "$$",
+        "time": "堂食",
+        "vibe": "健康"
+    },
+    {
+        "name": "麦当劳 (金拱门)",
+        "cuisine": "西式快餐",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "轻食沙拉",
+        "cuisine": "轻食/沙拉",
+        "price": "$$",
+        "time": "快速",
+        "vibe": "健康"
+    },
+    {
+        "name": "食堂",
+        "cuisine": "员工食堂",
+        "price": "$",
+        "time": "快速",
+        "vibe": "健康"
+    },
+    {
+        "name": "重庆小面",
+        "cuisine": "川渝面馆",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "淮南牛肉汤",
+        "cuisine": "汤饭小吃",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "麻辣烫",
+        "cuisine": "中式快餐",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "西北面馆",
+        "cuisine": "西北面食",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "浅草",
+        "cuisine": "日式料理",
+        "price": "$$",
+        "time": "堂食",
+        "vibe": "健康"
+    },
+    {
+        "name": "猪脚饭",
+        "cuisine": "粤式快餐",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "乡村大院",
+        "cuisine": "地方土菜",
+        "price": "$$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "麦当劳",
+        "cuisine": "西式快餐",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "肯德基",
+        "cuisine": "西式快餐",
+        "price": "$",
+        "time": "快速",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "恩施菜",
+        "cuisine": "鄂西土家菜",
+        "price": "$$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "剁椒鱼头",
+        "cuisine": "经典湘菜",
+        "price": "$$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "眉州东坡",
+        "cuisine": "川菜",
+        "price": "$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "韩忠诚兰州牛肉面",
+        "cuisine": "西北面食",
+        "price": "$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "星洲小馆",
+        "cuisine": "新加坡菜",
+        "price": "$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "COCO番薯屋",
+        "cuisine": "咖喱",
+        "price": "$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "滨寿司",
+        "cuisine": "日式简餐",
+        "price": "$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "威海小海鲜",
+        "cuisine": "家常菜",
+        "price": "$$$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "双拼饭",
+        "cuisine": "广式烧腊",
+        "price": "$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+    {
+        "name": "螺蛳粉",
+        "cuisine": "广西小吃",
+        "price": "$",
+        "time": "堂食",
+        "vibe": "碳水快乐"
+    },
+];
     ];
 
     // 应用状态
