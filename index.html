@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's For Lunch?</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #16a34a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            color: var(--text-main);
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Action 2: Randomizer Styling */
+        .random-zone {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #eff6ff;
+            border: 1px dashed var(--primary);
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: none;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Action 1: Filter Styling */
+        .filter-group {
+            margin-bottom: 16px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .chip.active {
+            background-color: var(--text-main);
+            color: white;
+            border-color: var(--text-main);
+        }
+
+        /* Restaurant List Styling */
+        .restaurant-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .restaurant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .restaurant-item:last-child {
+            border-bottom: none;
+        }
+
+        .restaurant-info h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .restaurant-info p {
+            margin: 2px 0 0 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .tags {
+            display: flex;
+            gap: 4px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            color: var(--text-main);
+        }
+
+        /* Action 3: Form Styling */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-control {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-control.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>What's For Lunch? 🥡</h1>
+        <p class="subtitle">Settle the office debate instantly.</p>
+    </header>
+
+    <div class="card random-zone">
+        <button class="btn" id="spinBtn">🎲 Spin the Lunch Wheel</button>
+        <div class="result-display" id="resultDisplay">Today's Verdict: Fetching...</div>
+    </div>
+
+    <div class="card">
+        <h3>Filter Options</h3>
+        
+        <div class="filter-group">
+            <span class="filter-label">Budget</span>
+            <div class="chip-container" id="budgetFilters">
+                <div class="chip" data-type="price" data-val="$">$ (Budget)</div>
+                <div class="chip" data-type="price" data-val="$$">$$ (Mid-Tier)</div>
+                <div class="chip" data-type="price" data-val="$$$">$$$ (Splurge)</div>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Time Constraints</span>
+            <div class="chip-container" id="timeFilters">
+                <div class="chip" data-type="time" data-val="Fast">Fast (&lt;10 min grab)</div>
+                <div class="chip" data-type="time" data-val="Sit-down">Sit-down Meal</div>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <span class="filter-label">Vibe</span>
+            <div class="chip-container" id="vibeFilters">
+                <div class="chip" data-type="vibe" data-val="Healthy">Clean / Healthy</div>
+                <div class="chip" data-type="vibe" data-val="Comfort">Heavy / Comfort</div>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+
+        <h3 id="listCount">Available Spots (0)</h3>
+        <ul class="restaurant-list" id="restaurantList"></ul>
+    </div>
+
+    <div class="card">
+        <h3>➕ Add a New Office Spot</h3>
+        <form id="addRestaurantForm">
+            <div class="form-grid">
+                <div class="form-control full-width">
+                    <label for="newName">Restaurant Name</label>
+                    <input type="text" id="newName" placeholder="e.g., Local Hand-Pulled Noodles" required>
+                </div>
+                <div class="form-control">
+                    <label for="newCuisine">Cuisine Type</label>
+                    <input type="text" id="newCuisine" placeholder="e.g., Chinese, Italian" required>
+                </div>
+                <div class="form-control">
+                    <label for="newPrice">Budget</label>
+                    <select id="newPrice">
+                        <option value="$">$ (Budget)</option>
+                        <option value="$$">$$ (Mid-tier)</option>
+                        <option value="$$$">$$$ (Splurge)</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="newTime">Time Format</label>
+                    <select id="newTime">
+                        <option value="Fast">Fast (&lt;10 mins)</option>
+                        <option value="Sit-down">Sit-down</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="newVibe">Vibe</label>
+                    <select id="newVibe">
+                        <option value="Comfort">Heavy / Comfort Food</option>
+                        <option value="Healthy">Clean / Healthy</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Add to Team List</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // INPUT YOUR INITIAL RESTAURANT LIST HERE!
+    // ==========================================
+    const INITIAL_RESTAURANTS = [
+        { name: "Local Hand-Pulled Noodles", cuisine: "Chinese", price: "$", time: "Fast", vibe: "Comfort" },
+        { name: "Green & Clean Salad Co.", cuisine: "Salads", price: "$$", time: "Fast", vibe: "Healthy" },
+        { name: "The Corner Burger Joint", cuisine: "American", price: "$$", time: "Sit-down", vibe: "Comfort" },
+        { name: "Premium Charcoal Steakhouse", cuisine: "Western", price: "$$$", time: "Sit-down", vibe: "Comfort" },
+        { name: "Steam Basket Dim Sum", cuisine: "Cantonese", price: "$$", time: "Sit-down", vibe: "Comfort" }
+    ];
+
+    // App State
+    let restaurants = [];
+    let activeFilters = { price: [], time: [], vibe: [] };
+
+    // Elements
+    const listElement = document.getElementById('restaurantList');
+    const listCountElement = document.getElementById('listCount');
+    const resultDisplay = document.getElementById('resultDisplay');
+    const spinBtn = document.getElementById('spinBtn');
+
+    // Initialize App
+    function init() {
+        const savedData = localStorage.getItem('office_lunch_spots');
+        if (savedData) {
+            restaurants = JSON.parse(savedData);
+        } else {
+            restaurants = [...INITIAL_RESTAURANTS];
+            saveToStorage();
+        }
+        renderList();
+        setupFilters();
+    }
+
+    function saveToStorage() {
+        localStorage.setItem('office_lunch_spots', JSON.stringify(restaurants));
+    }
+
+    // Render filtered view
+    function renderList() {
+        listElement.innerHTML = '';
+        const filtered = getFilteredList();
+        
+        listCountElement.innerText = `Available Spots (${filtered.length})`;
+
+        if (filtered.length === 0) {
+            listElement.innerHTML = `<li class="restaurant-item" style="color: var(--text-muted)">No matching lunch spots found. Broaden your search parameters!</li>`;
+            return;
+        }
+
+        filtered.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'restaurant-item';
+            li.innerHTML = `
+                <div class="restaurant-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.cuisine}</p>
+                </div>
+                <div class="tags">
+                    <span class="tag">${item.price}</span>
+                    <span class="tag">${item.time}</span>
+                    <span class="tag">${item.vibe}</span>
+                </div>
+            `;
+            listElement.appendChild(li);
+        });
+    }
+
+    function getFilteredList() {
+        return restaurants.filter(item => {
+            const matchPrice = activeFilters.price.length === 0 || activeFilters.price.includes(item.price);
+            const matchTime = activeFilters.time.length === 0 || activeFilters.time.includes(item.time);
+            const matchVibe = activeFilters.vibe.length === 0 || activeFilters.vibe.includes(item.vibe);
+            return matchPrice && matchTime && matchVibe;
+        });
+    }
+
+    // Filter Logic Handling
+    function setupFilters() {
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const type = chip.getAttribute('data-type');
+                const val = chip.getAttribute('data-val');
+
+                if (chip.classList.contains('active')) {
+                    chip.classList.remove('active');
+                    activeFilters[type] = activeFilters[type].filter(v => v !== val);
+                } else {
+                    chip.classList.add('active');
+                    activeFilters[type].push(val);
+                }
+                renderList();
+            });
+        });
+    }
+
+    // ACTION 2: RANDOMIZER WITH TICKER ANIMATION
+    spinBtn.addEventListener('click', () => {
+        const candidates = getFilteredList();
+        if (candidates.length === 0) {
+            alert("No options available under your current filters to choose from!");
+            return;
+        }
+
+        spinBtn.disabled = true;
+        resultDisplay.style.display = 'block';
+        
+        let counter = 0;
+        const totalTicks = 12;
+        
+        const interval = setInterval(() => {
+            const transientPick = candidates[Math.floor(Math.random() * candidates.length)];
+            resultDisplay.innerText = `🎲 Rolling: ${transientPick.name}`;
+            counter++;
+            
+            if (counter >= totalTicks) {
+                clearInterval(interval);
+                const finalPick = candidates[Math.floor(Math.random() * candidates.length)];
+                resultDisplay.innerHTML = `🎉 Today's Verdict: <strong>${finalPick.name}</strong> (${finalPick.cuisine})`;
+                spinBtn.disabled = false;
+            }
+        }, 100);
+    });
+
+    // ACTION 3: ADD NEW RESTAURANT
+    document.getElementById('addRestaurantForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const newSpot = {
+            name: document.getElementById('newName').value.trim(),
+            cuisine: document.getElementById('newCuisine').value.trim(),
+            price: document.getElementById('newPrice').value,
+            time: document.getElementById('newTime').value,
+            vibe: document.getElementById('newVibe').value
+        };
+
+        restaurants.push(newSpot);
+        saveToStorage();
+        renderList();
+        
+        // Reset only the name/cuisine input text fields
+        document.getElementById('newName').value = '';
+        document.getElementById('newCuisine').value = '';
+        
+        alert(`"${newSpot.name}" has been saved to your local browser roster!`);
+    });
+
+    // Run on startup
+    init();
+</script>
+
+</body>
+</html>
