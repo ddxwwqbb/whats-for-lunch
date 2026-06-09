@@ -337,14 +337,35 @@
     const spinBtn = document.getElementById('spinBtn');
 
     // 初始化
+   // 智能初始化：自动检测并合并 GitHub 上的新初始名单
     function init() {
         const savedData = localStorage.getItem('office_lunch_spots');
+        
         if (savedData) {
-            restaurants = JSON.parse(savedData);
+            let localRestaurants = JSON.parse(savedData);
+            let hasUpdates = false;
+
+            // 循环检查代码里的 INITIAL_RESTAURANTS，如果有本地没有的店，自动合并进去
+            INITIAL_RESTAURANTS.forEach(initialItem => {
+                const alreadyExists = localRestaurants.some(localItem => localItem.name === initialItem.name);
+                if (!alreadyExists) {
+                    localRestaurants.push(initialItem);
+                    hasUpdates = true;
+                }
+            });
+
+            restaurants = localRestaurants;
+            
+            // 如果合并了新店，自动更新本地缓存
+            if (hasUpdates) {
+                saveToStorage();
+            }
         } else {
+            // 第一次打开，直接使用初始名单
             restaurants = [...INITIAL_RESTAURANTS];
             saveToStorage();
         }
+        
         renderList();
         setupFilters();
     }
