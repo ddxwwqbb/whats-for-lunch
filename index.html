@@ -297,7 +297,15 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-success">加入团队大名单</button>
-        </form>
+       		</form>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+        <div style="text-align: center;">
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 8px;">
+                💡 发现好店并添加了？点击下方按钮复制配置，发给群主同步到所有人初始名单中！
+            </p>
+            <button class="btn" id="exportBtn" style="background-color: #64748b;">📋 复制我添加的名单配置</button>
+        </div>
     </div>
 </div>
 
@@ -484,7 +492,25 @@
     });
 
     // 启动应用
-    init();
+    // 自动导出本地大名单功能
+    document.getElementById('exportBtn').addEventListener('click', () => {
+        if (restaurants.length === 0) {
+            alert("当前名单为空，无需导出！");
+            return;
+        }
+
+        // 把数据格式化成干净、格式化好的 JavaScript 代码文本
+        const codeString = "const INITIAL_RESTAURANTS = " + JSON.stringify(restaurants, null, 4) + ";";
+
+        // 将文本一键复制到用户的系统剪贴板
+        navigator.clipboard.writeText(codeString).then(() => {
+            alert("📋 团队大名单已成功复制到剪贴板！\n快去把这段内容发给群主同步吧！");
+        }).catch(err => {
+            console.error('无法复制: ', err);
+            alert("复制失败，请在控制台查看。");
+        });
+    });
+	init();
 </script>
 
 </body>
